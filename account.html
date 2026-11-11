@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field with context %}
+{% block title %}My account{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>My account</h1><p class="sub">{{ user.email }} · {{ m.ROLES[user.role] }}</p></div></div>
+<form class="panel" method="post" action="/account/password" style="max-width:480px">
+  <h2>Change password</h2>{{ csrf_field() }}
+  <label class="f">Current password<input type="password" id="current" name="current" required autocomplete="current-password"></label>
+  <label class="f">New password <span class="hint">At least 10 characters, with letters and numbers.</span><input type="password" id="new" name="new" required autocomplete="new-password"></label>
+  <label class="f">Repeat new password<input type="password" id="confirm" name="confirm" required autocomplete="new-password"></label>
+  <div><button class="btn primary">Change password</button></div>
+</form>
+{% endblock %}

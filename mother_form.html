@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field, region_select, locs_json with context %}
+{% block title %}{{ 'Edit ' ~ mo.name if mo else 'Register a mother' }}{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>{{ 'Edit ' ~ mo.name if mo else 'Register a mother' }}</h1>
+  <p class="sub">{% if mo %}{{ mo.code }}{% else %}Any pregnant woman can join: farmers, traders, home-makers, workers, in villages or towns.{% endif %}</p></div></div>
+<form class="panel" method="post" action="{{ '/mothers/%d/edit'|format(mo.id) if mo else '/mothers/new' }}" style="max-width:900px">
+  {{ csrf_field() }}
+  <fieldset><legend>Mother</legend><div class="fields">
+    <label class="f">Full name<input type="text" id="name" name="name" value="{{ mo.name if mo }}" required minlength="3"></label>
+    <label class="f">Phone number<input type="tel" id="phone" name="phone" value="{{ mo.phone if mo }}" placeholder="0754 123 456" required></label>
+    <label class="f">Age<input type="number" id="age" name="age" min="12" max="55" value="{{ mo.age if mo and mo.age }}"></label>
+    <label class="f">Previous pregnancies <span class="hint">Including this one</span><input type="number" id="gravida" name="gravida" min="1" max="20" value="{{ mo.gravida if mo and mo.gravida }}"></label>
+    <label class="f">SMS language<select name="language" id="language"><option value="sw">Kiswahili</option><option value="en" {{ 'selected' if mo and mo.language == 'en' }}>English</option></select></label>
+  </div></fieldset>
+  <fieldset><legend>Where she lives</legend><div class="fields">
+    <label class="f">Region{{ region_select(regions, mo.region if mo else (user.region or '')) }}</label>
+    <label class="f">District<select name="district" id="district" data-district data-value="{{ mo.district if mo else (user.district or '') }}" required></select></label>
+    <label class="f">Ward / street<input type="text" id="ward" name="ward" value="{{ mo.ward if mo and mo.ward else (user.ward or '' if not mo else '') }}"></label>
+    <label class="f">Village / hamlet<input type="text" id="village" name="village" value="{{ mo.village if mo and mo.village }}"></label>
+    <label class="f">Area<select name="setting" id="setting">{% for k, v in m.SETTINGS_TYPES.items() %}<option value="{{ k }}" {{ 'selected' if mo and mo.setting == k }}>{{ v }}</option>{% endfor %}</select></label>
+  </div></fieldset>
+  <fieldset><legend>Work</legend><div class="fields">
+    <label class="f">Main work<select name="livelihood" id="livelihood" data-livelihood>{% for k, v in m.LIVELIHOODS.items() %}<option value="{{ k }}" {{ 'selected' if mo and mo.livelihood == k }}>{{ v[1] }}</option>{% endfor %}</select></label>
+    <label class="f" data-crop-box>Main crop <span class="hint">Sets her farm risk periods</span><select name="crop" id="crop" data-crop data-value="{{ mo.crop if mo and mo.crop }}"></select></label>
+  </div></fieldset>
+  {% if not mo %}
+  <fieldset><legend>Pregnancy</legend><div class="fields">
+    <label class="f">Expected due date<input type="date" id="edd" name="edd" required></label>
+    <label class="f">Due date from<select name="edd_source" id="edd_source"><option value="chw">CHW estimate</option><option value="mother">Mother</option><option value="scan">Clinic card / scan</option></select></label>
+  </div></fieldset>
+  {% endif %}
+  {% if user.role != 'chw' %}
+  <fieldset><legend>Care team</legend><div class="fields">
+    <label class="f">Community health worker<select name="chw_id" id="chw_id"><option value="">Assign automatically</option>
+      {% for c in chws %}<option value="{{ c.id }}" {{ 'selected' if mo and mo.chw_id == c.id }}>{{ c.name }} ({{ c.district or c.region }})</option>{% endfor %}</select></label>
+    {% if mo %}<label class="f">Health facility<select name="facility_id" id="facility_id"><option value="">Nearest in district</option>
+      {% for f in facilities %}<option value="{{ f.id }}" {{ 'selected' if mo.facility_id == f.id }}>{{ f.name }}</option>{% endfor %}</select></label>{% endif %}
+  </div></fieldset>
+  {% endif %}
+  {% if not mo %}
+  <label class="checks"><label><input type="checkbox" name="consent" id="consent" value="1" required> The mother agreed to join and to share her details with her CHW and the helpers assigned to her.</label></label>
+  {% endif %}
+  <div class="actions"><button class="btn primary">{{ 'Save' if mo else 'Register and send welcome SMS' }}</button>
+    <a class="btn" href="{{ '/mothers/%d'|format(mo.id) if mo else '/mothers' }}">Cancel</a></div>
+</form>
+{{ locs_json(locs, crops) }}
+{% endblock %}

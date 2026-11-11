@@ -1,0 +1,16 @@
+{% macro csrf_field() %}<input type="hidden" name="csrf" value="{{ csrf }}">{% endmacro %}
+{% macro status_pill(s, labels=None) %}<span class="pill {{ s }}">{{ (labels or m.REQUEST_STATUS).get(s, s)|replace('_',' ') }}</span>{% endmacro %}
+{% macro yn(name, label) %}
+<div class="yn"><span>{{ label }}</span><span class="opts">
+  <label><input type="radio" name="{{ name }}" value="yes"> Yes</label>
+  <label><input type="radio" name="{{ name }}" value="no"> No</label>
+  <label><input type="radio" name="{{ name }}" value="" checked> Not asked</label></span></div>
+{% endmacro %}
+{% macro pct(v, n) %}{% if v is none %}<span class="muted">no data</span>{% else %}{{ v }}%{% endif %} <span class="muted small">n={{ n }}</span>{% endmacro %}
+{% macro region_select(regions, value='', required=True) %}
+<select name="region" data-region {{ 'required' if required }}><option value="">Choose…</option>
+{% for r in regions %}<option {{ 'selected' if r == value }}>{{ r }}</option>{% endfor %}</select>
+{% endmacro %}
+{% macro locs_json(locs, crops=None) %}
+<script type="application/json" id="locs">{{ {'districts': locs, 'crops': crops}|tojson }}</script>
+{% endmacro %}

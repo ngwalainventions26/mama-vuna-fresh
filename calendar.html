@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field with context %}
+{% block title %}Crop labour calendar{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Crop labour calendar</h1>
+  <p class="sub">{{ total }} farm tasks for {{ crops }} crops. When a pregnant farmer's protected period overlaps a heavy or pesticide task for her region and crop, the platform finds her a helper. Region "ALL" is used where a region has no rows of its own.</p></div>
+  <div class="actions"><a class="btn" href="/admin/calendar.csv">Download CSV</a></div></div>
+<div class="note-box" style="margin-bottom:16px">Months are typical and vary by district and season. Ask your district agricultural extension officer to check the rows for your area, then upload the corrected file.</div>
+<form class="panel filters" method="get" style="margin-bottom:16px"><label class="f">Region<select name="region" id="region" onchange="this.form.submit()"><option value="">All</option>
+  {% for r in regions %}<option {{ 'selected' if r == region }}>{{ r }}</option>{% endfor %}</select></label><noscript><button class="btn">Show</button></noscript></form>
+<div class="panel" style="margin-bottom:16px"><div class="table-wrap"><table><thead><tr><th>Region</th><th>Crop</th><th>Task</th><th>Months</th><th>Type</th><th>Planning effort</th></tr></thead><tbody>
+{% set MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %}
+{% for c in rows %}<tr><td>{{ c.region }}<div class="sub">{{ c.season_system or '' }}</div></td><td>{{ c.crop }}</td><td>{{ c.activity }}</td>
+  <td class="num">{{ MON[c.start_month-1] }}–{{ MON[c.end_month-1] }}</td>
+  <td>{% if c.pesticide %}<span class="tag chem">chemical</span>{% else %}<span class="tag">{{ c.task_type }}</span>{% endif %}</td>
+  <td class="num">{{ c.hours_per_day|round(1) }} h × {{ c.days_per_week|round(0)|int }} d/wk</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% if user.role == 'admin' %}
+<div class="grid g2">
+<form class="panel" method="post" action="/admin/calendar/upload" enctype="multipart/form-data">{{ csrf_field() }}
+  <h2>Replace with your own data</h2>
+  <p class="small muted">CSV columns: <span class="mono">region, season_system, crop, activity, start_month, end_month, heavy_work, pesticide, task_type</span>. Optional: <span class="mono">hours_per_day, days_per_week</span>. Months as 1–12 or Jan–Dec; yes/no for heavy_work and pesticide; task_type is lifting, bending or chemical.</p>
+  <input type="file" name="file" id="file" accept=".csv,text/csv" required>
+  <div><button class="btn primary" data-confirm="Press again to replace all rows">Upload and replace</button></div></form>
+<form class="panel" method="post" action="/admin/calendar/reset">{{ csrf_field() }}<h2>Restore built-in calendar</h2>
+  <p class="small muted">The built-in calendar covers 8 regions in detail plus national defaults, compiled from FAO GIEWS season descriptions.</p>
+  <div><button class="btn" data-confirm="Press again to restore">Restore</button></div></form>
+</div>
+{% endif %}
+{% endblock %}

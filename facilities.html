@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field, region_select, locs_json with context %}
+{% block title %}Health facilities{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Health facilities</h1><p class="sub">When a mother reports a danger sign, she is told the facility in her ward or district. Add the facilities in your area with a working phone number.</p></div></div>
+<div class="panel" style="margin-bottom:16px"><div class="table-wrap"><table><thead><tr><th>Facility</th><th>Level</th><th>Place</th><th>Phone</th><th>Emergency obstetric care</th><th></th></tr></thead><tbody>
+{% for f in rows %}<tr><td><b>{{ f.name }}</b>{% if not f.active %} <span class="pill">inactive</span>{% endif %}</td><td>{{ f.level }}</td><td>{{ f.ward or '' }}<div class="sub">{{ f.district }}, {{ f.region }}</div></td>
+  <td class="mono">{{ f.phone or '—' }}</td><td>{{ 'Yes' if f.offers_emonc else 'No' }}</td>
+  <td>{% if user.role != 'chw' %}<form method="post" action="/admin/facilities/{{ f.id }}/toggle">{{ csrf_field() }}<button class="btn sm">{{ 'Deactivate' if f.active else 'Activate' }}</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="6" class="empty">No facilities yet.</td></tr>{% endfor %}</tbody></table></div></div>
+{% if user.role != 'chw' %}
+<form class="panel" method="post" action="/admin/facilities/new" style="max-width:900px">{{ csrf_field() }}<h2>Add a facility</h2>
+  <div class="fields">
+    <label class="f">Name<input type="text" name="name" id="f_name" required></label>
+    <label class="f">Level<select name="level" id="f_level">{% for l in ['dispensary','health centre','district hospital','regional hospital','private clinic'] %}<option>{{ l }}</option>{% endfor %}</select></label>
+    <label class="f">Region{{ region_select(regions, user.region or '') }}</label>
+    <label class="f">District<select name="district" id="f_district" data-district data-value="{{ user.district or '' }}" required></select></label>
+    <label class="f">Ward<input type="text" name="ward" id="f_ward"></label>
+    <label class="f">Phone<input type="tel" name="phone" id="f_phone"></label>
+  </div>
+  <label class="checks"><label><input type="checkbox" name="offers_emonc" value="1"> Offers emergency obstetric care (CEmONC/BEmONC)</label></label>
+  <div><button class="btn primary">Add facility</button></div></form>
+{{ locs_json(locs) }}
+{% endif %}
+{% endblock %}

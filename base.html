@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}{{ settings.APP_NAME }}{% endblock %} · {{ settings.APP_NAME }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="/static/style.css?v=2">
+<meta name="robots" content="noindex">
+</head>
+<body>
+{% if user %}
+{% set path = request.url.path %}
+<header class="topbar"><button id="navToggle" aria-label="Open menu">Menu</button><b>{{ settings.APP_NAME }}</b></header>
+<div class="shell">
+  <aside class="side">
+    <a class="brand" href="/"><span class="brand-mark">MV</span><span><b>{{ settings.APP_NAME }}</b><span>{{ settings.ORG_NAME }}</span></span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="/" class="{{ 'on' if path == '/' }}">Overview</a>
+      <a href="/mothers" class="{{ 'on' if path.startswith('/mothers') }}">Mothers</a>
+      <a href="/requests" class="{{ 'on' if path.startswith('/requests') }}">Support requests</a>
+      <a href="/danger" class="{{ 'on' if path.startswith('/danger') }}">Danger reports</a>
+      <a href="/helpers" class="{{ 'on' if path.startswith('/helpers') }}">Helpers</a>
+      <a href="/groups" class="{{ 'on' if path.startswith('/groups') }}">Community groups</a>
+      <span class="sec">Records</span>
+      <a href="/ledger" class="{{ 'on' if path.startswith('/ledger') }}">Time-credit ledger</a>
+      <a href="/reports" class="{{ 'on' if path.startswith('/reports') }}">Reports</a>
+      <a href="/admin/calendar" class="{{ 'on' if path.startswith('/admin/calendar') }}">Crop labour calendar</a>
+      <a href="/admin/facilities" class="{{ 'on' if path.startswith('/admin/facilities') }}">Health facilities</a>
+      {% if user.role in ('admin', 'district_officer') %}
+      <span class="sec">Manage</span>
+      <a href="/admin/users" class="{{ 'on' if path.startswith('/admin/users') }}">Staff accounts</a>
+      <a href="/admin/messages" class="{{ 'on' if path.startswith('/admin/messages') }}">SMS log</a>
+      {% endif %}
+      {% if user.role == 'admin' %}
+      <a href="/admin/simulator" class="{{ 'on' if path.startswith('/admin/simulator') }}">Phone simulator</a>
+      <a href="/admin/system" class="{{ 'on' if path.startswith('/admin/system') }}">System</a>
+      <a href="/admin/audit" class="{{ 'on' if path.startswith('/admin/audit') }}">Audit log</a>
+      {% endif %}
+    </nav>
+    <div class="side-foot">
+      <span>{{ user.name }}<br><span style="opacity:.7">{{ m.ROLES[user.role] }}{% if user.district %} · {{ user.district }}{% elif user.region %} · {{ user.region }}{% endif %}</span></span>
+      <a href="/account">My account</a>
+      <form method="post" action="/logout"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit">Sign out</button></form>
+    </div>
+  </aside>
+  <main class="main">
+    {% if flash %}<div class="flash {{ flash.kind }}" role="status">{{ flash.text }}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}
+{% block bare %}{% endblock %}
+{% endif %}
+<script src="/static/app.js?v=1"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

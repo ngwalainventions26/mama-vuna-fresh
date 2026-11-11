@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Audit log{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Audit log</h1><p class="sub">Who changed what. Last 400 actions.</p></div></div>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Record</th><th>Detail</th></tr></thead><tbody>
+{% for a in rows %}<tr><td class="num">{{ a.at.strftime('%d/%m/%y %H:%M') }}</td><td>{{ a.user.name if a.user else 'system' }}</td><td>{{ a.action|replace('_',' ') }}</td>
+  <td class="mono">{{ a.entity or '' }}{{ ' #' ~ a.entity_id if a.entity_id }}</td><td class="small">{{ a.detail or '' }}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">Nothing yet.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_m.html" import status_pill with context %}
+{% block title %}Support requests{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Support requests</h1>
+  <p class="sub">Created automatically {{ settings.LEAD_DAYS }} days before each risk period, or when a mother asks. One helper is asked at a time; after {{ settings.ALERT_TIMEOUT_HOURS }} hours with no reply the next helper is asked.</p></div></div>
+<div class="actions" style="margin-bottom:16px">
+  <a class="btn {{ 'primary' if not status }}" href="/requests">Needs attention</a>
+  {% for s, l in m.REQUEST_STATUS.items() %}<a class="btn {{ 'primary' if s == status }}" href="/requests?status={{ s }}">{{ l }} <span class="num">{{ counts[s] }}</span></a>{% endfor %}
+</div>
+<div class="panel"><div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Mother</th><th>Help needed</th><th>Period</th><th>Helper</th><th>Asked</th><th>Status</th></tr></thead><tbody>
+{% for r in rows %}
+<tr><td class="num"><a href="/requests/{{ r.id }}">{{ r.id }}</a></td>
+  <td><a href="/mothers/{{ r.mother.id }}">{{ r.mother.name }}</a><div class="sub">{{ r.mother.village or r.mother.ward or '' }} {{ r.mother.district }}</div></td>
+  <td>{{ label_for(r.activity, 'en') }} {% if r.task_type == 'chemical' %}<span class="tag chem">pesticide</span>{% endif %}<div class="sub">{{ r.source }} · ~{{ r.est_hours|int }} h planned</div></td>
+  <td class="num">{{ r.start_date.strftime('%d/%m') }}–{{ r.end_date.strftime('%d/%m/%y') }}</td>
+  <td>{{ r.helper.name if r.helper else '—' }}</td><td class="num">{{ r.alerts|length }}</td>
+  <td>{{ status_pill(r.status) }}</td></tr>
+{% else %}<tr><td colspan="7" class="empty">Nothing here.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

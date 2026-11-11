@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}SMS log{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>SMS log</h1><p class="sub">Last 300 messages. Provider: <b>{{ settings.SMS_PROVIDER }}</b>{% if settings.SMS_PROVIDER == 'console' %} (messages are stored but not sent; set SMS_PROVIDER=africastalking to send){% endif %}. {{ failed }} failed.</p></div></div>
+<form class="panel filters" method="get" style="margin-bottom:16px"><label class="f">Phone<input type="search" name="phone" id="phone" value="{{ phone }}"></label><button class="btn">Filter</button></form>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Phone</th><th></th><th>Message</th><th>Status</th></tr></thead><tbody>
+{% for r in rows %}<tr><td class="num">{{ r.created_at.strftime('%d/%m %H:%M') }}</td><td class="mono">{{ r.phone }}</td><td>{{ '→' if r.direction == 'out' else '←' }} <span class="sub">{{ r.kind or '' }}</span></td>
+  <td style="white-space:pre-wrap;max-width:520px" class="small">{{ r.body }}</td><td><span class="pill {{ r.status }}">{{ r.status }}</span>{% if r.error %}<div class="sub">{{ r.error }}</div>{% endif %}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">No messages.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

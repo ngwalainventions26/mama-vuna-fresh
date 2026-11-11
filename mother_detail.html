@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field, status_pill, yn with context %}
+{% block title %}{{ mo.name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="eyebrow mono">{{ mo.code }}{% if mo.is_demo %} · demo record{% endif %}</div>
+    <h1>{{ mo.name }}</h1>
+    <p class="sub">{{ mo.village or mo.ward or '' }}{{ ', ' if mo.village or mo.ward }}{{ mo.district }}, {{ mo.region }} · {{ m.LIVELIHOODS[mo.livelihood][1] }}{% if mo.crop %} ({{ label_for(mo.crop, 'en') }}){% endif %}</p></div>
+  <div class="actions">
+    <span class="pill {{ mo.status }}">{{ mo.status }}</span>{% if mo.risk_flag != 'normal' %}<span class="pill {{ mo.risk_flag }}">{{ mo.risk_flag }} risk</span>{% endif %}
+    <a class="btn" href="/mothers/{{ mo.id }}/edit">Edit details</a>
+  </div>
+</div>
+
+<div class="grid g-side mother-grid">
+<div class="stack">
+  <section class="panel">
+    <div class="panel-head"><div><h2>Protected period</h2>
+      <p class="muted small">Week {{ settings.RISK_START_WEEK }} of pregnancy ({{ fmt_date(p_start) }}) to 6 weeks after birth ({{ fmt_date(p_end) }})</p></div>
+      {% if mo.status == 'pregnant' %}<span class="num">Week {{ week }}</span>{% endif %}</div>
+    {% set span = ((p_end - p_start).days + 28) %}
+    {% macro pos(d) %}{{ (((d - p_start).days + 14) / span * 100)|round(2) }}{% endmacro %}
+    <div class="timeline" aria-hidden="true">
+      <div class="prot" style="left:{{ pos(p_start) }}%;right:{{ 100 - pos(p_end)|float }}%"></div>
+      {% for w, r in wins %}<div class="win {{ 'chem' if w.pesticide else 'need' if w.source == 'livelihood' }}" style="top:{{ 5 if w.source == 'crop' else 22 }}px;left:{{ pos(w.start) }}%;width:{{ [((w.days / span) * 100)|round(2), 0.8]|max }}%" title="{{ w.activity }}"></div>{% endfor %}
+      <div class="mark edd" style="left:{{ pos(mo.delivery_date or mo.edd) }}%"></div>
+      {% if p_start <= today() <= p_end %}<div class="mark today" style="left:{{ pos(today()) }}%"></div>{% endif %}
+    </div>
+    <div class="legend"><span><i style="background:var(--gold-soft)"></i>Protected period</span><span><i style="background:var(--risk)"></i>Farm work</span>
+      <span><i style="background:repeating-linear-gradient(45deg,var(--risk) 0 3px,var(--warn) 3px 6px)"></i>Pesticide</span>
+      <span><i style="background:var(--info)"></i>Home and daily work</span><span><i style="background:var(--ink);width:3px"></i>{{ 'Birth' if mo.delivery_date else 'Due date' }}</span><span><i style="background:var(--ok);width:3px"></i>Today</span></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Period</th><th>Work to hand over</th><th>Planned hours</th><th>Status</th></tr></thead><tbody>
+      {% for w, r in wins %}
+      <tr><td class="num nowrap">{{ w.start.strftime('%d %b') }}–{{ w.end.strftime('%d %b') }}<div class="sub">{{ w.end.year }}</div></td>
+        <td>{{ label_for(w.activity, 'sw') }} {% if w.pesticide %}<span class="tag chem">pesticide</span>{% endif %}<div class="sub">{{ label_for(w.activity, 'en') }} · {{ 'crop calendar' if w.source == 'crop' else 'daily work' }}</div></td>
+        <td class="num">{{ w.est_hours|int }}</td>
+        <td>{% if r %}<a href="/requests/{{ r.id }}">{{ status_pill(r.status) }}</a>{% if r.helper %}<div class="sub">{{ r.helper.name }}</div>{% endif %}
+            {% elif w.end < today() %}<span class="muted small">past</span>
+            {% elif mo.status != 'closed' %}<form method="post" action="/mothers/{{ mo.id }}/request">{{ csrf_field() }}<input type="hidden" name="window_key" value="{{ w.key }}"><button class="btn sm">Find helper now</button></form>
+            <div class="sub">Automatic {{ settings.LEAD_DAYS }} days before</div>{% endif %}</td></tr>
+      {% else %}<tr><td colspan="4" class="empty">No heavy-work periods found for her work and crop.</td></tr>{% endfor %}
+      </tbody></table></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><h2>Support requests</h2></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>Help</th><th>Period</th><th>Helper</th><th>Status</th><th>Hours</th></tr></thead><tbody>
+    {% for r in requests %}
+      <tr><td class="num"><a href="/requests/{{ r.id }}">{{ r.id }}</a></td><td>{{ label_for(r.activity, 'en') }}<div class="sub">{{ r.source }}</div></td>
+        <td class="num">{{ r.start_date.strftime('%d/%m') }}–{{ r.end_date.strftime('%d/%m') }}</td><td>{{ r.helper.name if r.helper else '—' }}</td>
+        <td>{{ status_pill(r.status) }}</td><td class="num">{{ r.verified_hours or '' }}</td></tr>
+    {% else %}<tr><td colspan="6" class="empty">No requests yet. They are created automatically {{ settings.LEAD_DAYS }} days before each period.</td></tr>{% endfor %}
+    </tbody></table></div>
+    {% if mo.status != 'closed' %}
+    <details class="drawer"><summary>Ask for help now</summary><div class="body">
+      <form method="post" action="/mothers/{{ mo.id }}/request" class="fields">{{ csrf_field() }}
+        <label class="f">Kind of help<select name="task_type" id="task_type">{% for k, v in m.TASK_TYPES.items() %}<option value="{{ k }}">{{ v[1] }}</option>{% endfor %}</select></label>
+        <label class="f">From<input type="date" name="start" id="start" value="{{ today().isoformat() }}"></label>
+        <label class="f">Number of days<input type="number" name="days" id="days" min="1" max="60" value="7"></label>
+        <div style="align-self:end"><button class="btn primary">Send to best helper</button></div>
+      </form></div></details>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><h2>Follow-up visits</h2><span class="muted small">Answers feed the programme indicators.</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Date</th><th>Week</th><th>Heavy work</th><th>Pesticide</th><th>Got help</th><th>ANC up to date</th><th>Notes</th></tr></thead><tbody>
+    {% macro ynv(v) %}{% if v is none %}<span class="muted">—</span>{% elif v %}Yes{% else %}No{% endif %}{% endmacro %}
+    {% for v in visits %}
+      <tr><td class="num">{{ fmt_date(v.visit_date) }}<div class="sub">{{ v.kind }}{% if v.chw %} · {{ v.chw.name }}{% endif %}</div></td><td class="num">{{ v.gest_week or '—' }}</td>
+        <td>{{ ynv(v.did_heavy_work) }}</td><td>{{ ynv(v.handled_pesticide) }}</td><td>{{ ynv(v.help_received) }}</td><td>{{ ynv(v.anc_up_to_date) }}</td><td class="small">{{ v.notes or '' }}</td></tr>
+    {% else %}<tr><td colspan="7" class="empty">No visits recorded.</td></tr>{% endfor %}
+    </tbody></table></div>
+    <details class="drawer"><summary>Record a visit or phone call</summary><div class="body">
+      <form method="post" action="/mothers/{{ mo.id }}/visit" class="stack">{{ csrf_field() }}
+        <div class="fields"><label class="f">Date<input type="date" name="visit_date" id="visit_date" value="{{ today().isoformat() }}"></label>
+          <label class="f">Type<select name="kind" id="kind"><option value="home">Home visit</option><option value="phone">Phone call</option></select></label></div>
+        <p class="small muted">Ask about the last 7 days.</p>
+        {{ yn('did_heavy_work', 'Did she carry heavy loads or do long bending work?') }}
+        {{ yn('handled_pesticide', 'Did she mix, spray or touch pesticides?') }}
+        {{ yn('help_received', 'Did a helper do the work she needed?') }}
+        {{ yn('anc_up_to_date', 'Are her clinic (ANC) visits up to date?') }}
+        {{ yn('danger_signs_seen', 'Any danger signs?') }}
+        <label class="f">Notes<textarea name="notes" id="visit_notes"></textarea></label>
+        <div><button class="btn primary">Save visit</button></div>
+      </form></div></details>
+  </section>
+</div>
+
+<div class="stack">
+  <section class="panel">
+    <h2>Details</h2>
+    <dl class="kv">
+      <dt>Phone</dt><dd class="mono">{{ mo.phone }}</dd>
+      <dt>Age</dt><dd>{{ mo.age or '—' }}</dd>
+      <dt>Area</dt><dd>{{ m.SETTINGS_TYPES.get(mo.setting) }}</dd>
+      <dt>CHW</dt><dd>{{ mo.chw.name if mo.chw else 'Not assigned' }}</dd>
+      <dt>Facility</dt><dd>{{ mo.facility.name if mo.facility else 'Nearest in district' }}</dd>
+      <dt>Joined</dt><dd>{{ fmt_date(mo.created_at.date()) }} by {{ mo.registered_via|upper }}</dd>
+      <dt>Consent</dt><dd>{{ fmt_date(mo.consent_at.date()) if mo.consent_at else 'Not recorded' }}</dd>
+      <dt>SMS</dt><dd>{{ 'Stopped by her' if mo.opted_out else ('Kiswahili' if mo.language == 'sw' else 'English') }}</dd>
+    </dl>
+    <form method="post" action="/mothers/{{ mo.id }}/welcome">{{ csrf_field() }}<button class="btn sm">Resend welcome SMS</button></form>
+  </section>
+
+  <section class="panel">
+    <h2>Pregnancy</h2>
+    <dl class="kv"><dt>Due date</dt><dd class="num">{{ fmt_date(mo.edd) }} <span class="muted">({{ mo.edd_source }})</span></dd>
+      {% if mo.delivery_date %}<dt>Birth</dt><dd class="num">{{ fmt_date(mo.delivery_date) }}</dd>{% endif %}</dl>
+    {% if mo.status == 'pregnant' %}
+    <details class="drawer"><summary>Correct due date</summary><div class="body">
+      <form method="post" action="/mothers/{{ mo.id }}/edd" class="stack">{{ csrf_field() }}
+        <label class="f">New due date<input type="date" name="edd" id="new_edd" required></label>
+        <label class="f">Source<select name="source" id="edd_src"><option value="chw">CHW estimate</option><option value="scan">Clinic card / scan</option><option value="mother">Mother</option></select></label>
+        <div><button class="btn">Update</button></div></form></div></details>
+    {% endif %}
+    <details class="drawer" {{ 'open' if mo.status == 'delivered' and not mo.outcome }}><summary>{{ 'Edit birth outcome' if mo.outcome else 'Record birth' }}</summary><div class="body">
+      {% set o = mo.outcome %}
+      <form method="post" action="/mothers/{{ mo.id }}/birth" class="stack">{{ csrf_field() }}
+        <div class="fields">
+          <label class="f">Date of birth<input type="date" name="delivery_date" id="delivery_date" value="{{ (o.delivery_date if o else mo.delivery_date or today()).isoformat() }}" required></label>
+          <label class="f">Place<select name="place" id="place">{% for v, l in [('facility','Health facility'),('home','Home'),('transit','On the way')] %}<option value="{{ v }}" {{ 'selected' if o and o.place == v }}>{{ l }}</option>{% endfor %}</select></label>
+          <label class="f">Weeks at birth <span class="hint">From clinic card</span><input type="number" name="gest_weeks" id="gest_weeks" min="20" max="45" value="{{ o.gest_weeks if o and o.gest_weeks }}"></label>
+          <label class="f">Birth weight (g)<input type="number" name="birth_weight_g" id="birth_weight_g" min="300" max="6500" value="{{ o.birth_weight_g if o and o.birth_weight_g }}"></label>
+          <label class="f">Baby<select name="outcome" id="outcome"><option value="live">Born alive</option><option value="stillbirth" {{ 'selected' if o and o.outcome == 'stillbirth' }}>Stillbirth</option></select></label>
+          <label class="f">Information from<select name="source" id="oc_source"><option value="chw">CHW</option><option value="facility">Facility record</option><option value="mother">Mother</option></select></label>
+        </div>
+        {{ yn('mother_complication', 'Did the mother have a complication?') }}
+        {{ yn('referred', 'Was she referred to a higher facility?') }}
+        <label class="f">Notes<textarea name="notes" id="oc_notes">{{ o.notes if o and o.notes }}</textarea></label>
+        <div><button class="btn primary">Save birth outcome</button></div></form></div></details>
+    {% if mo.outcome %}<dl class="kv"><dt>Weeks</dt><dd>{{ mo.outcome.gest_weeks or '—' }}{% if mo.outcome.preterm %} <span class="pill watch">preterm</span>{% endif %}</dd>
+      <dt>Weight</dt><dd>{{ mo.outcome.birth_weight_g or '—' }} g{% if mo.outcome.low_birth_weight %} <span class="pill watch">low birth weight</span>{% endif %}</dd></dl>{% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>Danger reports</h2>
+    {% for d in dangers %}
+      <div class="stack" style="gap:6px;border-bottom:1px solid var(--line);padding-bottom:10px">
+        <div><span class="pill {{ d.status }}">{{ d.status }}</span> <span class="num">{{ d.reported_at.strftime('%d/%m/%Y %H:%M') }}</span> <span class="muted small">via {{ d.via }}</span></div>
+        <div>{% for s in d.signs.split(',') %}{{ m.DANGER_SIGNS.get(s, (s,s))[1] }}{{ ', ' if not loop.last }}{% endfor %}</div>
+        {% if d.notes %}<div class="small muted" style="white-space:pre-wrap">{{ d.notes }}</div>{% endif %}
+        {% if d.status != 'resolved' %}
+        <form method="post" action="/danger/{{ d.id }}" class="stack" style="gap:6px">{{ csrf_field() }}
+          <div class="fields"><select name="status" aria-label="Status">{% for s in ['contacted','referred','resolved'] %}<option {{ 'selected' if s == d.status }}>{{ s }}</option>{% endfor %}</select>
+            <select name="facility_id" aria-label="Facility"><option value="">Facility…</option>{% for f in facilities %}<option value="{{ f.id }}" {{ 'selected' if d.facility_id == f.id }}>{{ f.name }}</option>{% endfor %}</select></div>
+          <input type="text" name="notes" placeholder="What happened? (optional)" aria-label="Notes">
+          <div><button class="btn sm primary">Update</button></div></form>{% endif %}
+      </div>
+    {% else %}<p class="muted small">None. Mothers report danger signs on USSD (option 3) or by sending HATARI.</p>{% endfor %}
+  </section>
+
+  <section class="panel">
+    <h2>Risk flag</h2>
+    <form method="post" action="/mothers/{{ mo.id }}/risk" class="stack" style="gap:8px">{{ csrf_field() }}
+      <select name="risk_flag" id="risk_flag" aria-label="Risk flag">{% for v in ['normal','watch','high'] %}<option {{ 'selected' if mo.risk_flag == v }}>{{ v }}</option>{% endfor %}</select>
+      <input type="text" name="risk_note" id="risk_note" value="{{ mo.risk_note or '' }}" placeholder="Reason, e.g. twins, high blood pressure" aria-label="Reason">
+      <div><button class="btn sm">Save</button></div></form>
+  </section>
+
+  {% if mo.status != 'closed' %}
+  <form method="post" action="/mothers/{{ mo.id }}/close" class="panel">{{ csrf_field() }}
+    <h2>Close record</h2><p class="small muted">Stops all alerts. Use when she moves away, withdraws, or the pregnancy ends.</p>
+    <input type="text" name="reason" id="close_reason" placeholder="Reason" aria-label="Reason" required>
+    <div><button class="btn danger sm" data-confirm="Press again to close">Close record</button></div></form>
+  {% endif %}
+</div>
+</div>
+{% endblock %}

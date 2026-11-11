@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Mothers{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Mothers</h1><p class="sub">{{ rows|length }} shown{% if rows|length == 500 %} (first 500){% endif %}. Sorted by due date.</p></div>
+  <div class="actions"><a class="btn primary" href="/mothers/new">Register a mother</a></div>
+</div>
+<form class="panel filters" method="get" style="margin-bottom:16px">
+  <label class="f">Search<input type="search" id="q" name="q" value="{{ q }}" placeholder="Name, phone, code, village"></label>
+  <label class="f">Status<select name="status" id="status">
+    {% for v, l in [('active','Under protection'),('pregnant','Pregnant'),('delivered','Delivered'),('closed','Closed'),('','All')] %}
+    <option value="{{ v }}" {{ 'selected' if v == status }}>{{ l }}</option>{% endfor %}</select></label>
+  <label class="f">District<select name="district" id="district"><option value="">All</option>
+    {% for d in districts %}<option {{ 'selected' if d == district }}>{{ d }}</option>{% endfor %}</select></label>
+  <label class="f">Work<select name="livelihood" id="livelihood"><option value="">All</option>
+    {% for k, v in m.LIVELIHOODS.items() %}<option value="{{ k }}" {{ 'selected' if k == livelihood }}>{{ v[1] }}</option>{% endfor %}</select></label>
+  <button class="btn">Filter</button>
+</form>
+<div class="panel"><div class="table-wrap"><table>
+  <thead><tr><th>Mother</th><th>Place</th><th>Work</th><th>Week</th><th>Due</th><th>Status</th><th>CHW</th></tr></thead>
+  <tbody>
+  {% for x in rows %}
+  <tr><td><a href="/mothers/{{ x.id }}"><b>{{ x.name }}</b></a> {% if x.is_demo %}<span class="tag demo">demo</span>{% endif %}<div class="sub mono">{{ x.code }} · {{ x.phone }}</div></td>
+    <td>{{ x.village or x.ward or '—' }}<div class="sub">{{ x.district }}, {{ x.region }} · {{ m.SETTINGS_TYPES.get(x.setting) }}</div></td>
+    <td>{{ m.LIVELIHOODS[x.livelihood][1] }}{% if x.crop %}<div class="sub">{{ label_for(x.crop, 'en') }}</div>{% endif %}</td>
+    <td class="num">{{ gest_week(x.edd) if x.status == 'pregnant' else '—' }}</td>
+    <td class="num">{{ fmt_date(x.edd) }}</td>
+    <td><span class="pill {{ x.status }}">{{ x.status }}</span>{% if x.risk_flag != 'normal' %} <span class="pill {{ x.risk_flag }}">{{ x.risk_flag }} risk</span>{% endif %}</td>
+    <td>{{ x.chw.name if x.chw else '—' }}</td></tr>
+  {% else %}<tr><td colspan="7" class="empty">No mothers match. Mothers register by dialling {{ settings.USSD_SERVICE_CODE }}, or you can <a href="/mothers/new">register one here</a>.</td></tr>{% endfor %}
+  </tbody></table></div></div>
+{% endblock %}

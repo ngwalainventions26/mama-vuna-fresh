@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field with context %}
+{% block title %}Sign in{% endblock %}
+{% block bare %}
+<div class="login-wrap">
+  <form class="login" method="post" action="/login">
+    <a class="brand" href="/login"><span class="brand-mark">MV</span><span><b>{{ settings.APP_NAME }}</b><span>{{ settings.ORG_NAME }}</span></span></a>
+    <div><h1>Sign in</h1><p class="muted small">For community health workers, district officers and administrators.</p></div>
+    {% if error %}<div class="flash err">{{ error }}</div>{% endif %}
+    {{ csrf_field() }}<input type="hidden" name="next" value="{{ next }}">
+    <label class="f">Email<input type="email" id="email" name="email" value="{{ email or '' }}" autocomplete="username" required autofocus></label>
+    <label class="f">Password<input type="password" id="password" name="password" autocomplete="current-password" required></label>
+    <button class="btn primary" type="submit">Sign in</button>
+    <p class="muted small">Mothers and helpers use the platform by dialling {{ settings.USSD_SERVICE_CODE }} on any phone.</p>
+  </form>
+</div>
+{% endblock %}

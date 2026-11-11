@@ -1,0 +1,151 @@
+region,season_system,crop,activity,start_month,end_month,heavy_work,pesticide,task_type
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuandaa shamba (land preparation),10,11,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupanda (planting),11,12,yes,no,bending
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupalilia (weeding),1,2,yes,no,bending
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuweka mbolea (fertiliser application),1,1,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kunyunyizia dawa (pesticide spraying),1,2,no,yes,chemical
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuvuna (harvest),5,7,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupura na kubeba (threshing and carrying),7,8,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kuandaa shamba (land preparation),12,1,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupandikiza (transplanting),1,2,yes,no,bending
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupalilia (weeding),2,3,yes,no,bending
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kunyunyizia dawa (pesticide spraying),3,3,no,yes,chemical
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kuvuna (harvest),5,7,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupura na kubeba (threshing and carrying),6,7,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Ufuta (sesame),Kupanda (planting),2,3,yes,no,bending
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Ufuta (sesame),Kupalilia (weeding),3,4,yes,no,bending
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Ufuta (sesame),Kuvuna (harvest),6,7,yes,no,lifting
+Morogoro,"Msimu (unimodal, Nov-Apr rains)",Ufuta (sesame),Kubeba mazao (carrying produce to store/market),7,8,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Mtama (sorghum),Kuandaa shamba (land preparation),11,12,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Mtama (sorghum),Kupanda (planting),12,1,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Mtama (sorghum),Kupalilia (weeding),1,2,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Mtama (sorghum),Kuvuna (harvest),4,6,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Mtama (sorghum),Kupura na kubeba (threshing and carrying),6,7,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Alizeti (sunflower),Kupanda (planting),1,2,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Alizeti (sunflower),Kupalilia (weeding),2,3,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Alizeti (sunflower),Kuvuna (harvest),5,6,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Alizeti (sunflower),Kubeba mazao (carrying produce to store/market),6,7,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Karanga (groundnuts),Kupanda (planting),12,1,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Karanga (groundnuts),Kupalilia (weeding),1,2,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Karanga (groundnuts),Kung'oa (lifting from the ground),4,5,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Karanga (groundnuts),Kubeba mazao (carrying produce to store/market),5,6,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Zabibu (grapes),Kupogoa (pruning),2,2,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Zabibu (grapes),Kupogoa (pruning),8,8,yes,no,lifting
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Zabibu (grapes),Kunyunyizia dawa ya ukungu (fungicide spraying),12,3,no,yes,chemical
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Zabibu (grapes),Kuchuma (picking),3,4,yes,no,bending
+Dodoma,"Msimu (unimodal, Dec-Apr rains)",Zabibu (grapes),Kuchuma (picking),8,9,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuandaa shamba (land preparation),10,11,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupanda (planting),11,12,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupalilia (weeding),12,1,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuweka mbolea (fertiliser application),12,1,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kunyunyizia dawa (pesticide spraying),1,1,no,yes,chemical
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuvuna (harvest),6,7,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupura na kubeba (threshing and carrying),7,8,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Maharage (beans),Kupanda (planting),12,1,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Maharage (beans),Kupalilia (weeding),1,1,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Maharage (beans),Kunyunyizia dawa (pesticide spraying),1,2,no,yes,chemical
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Maharage (beans),Kuvuna (harvest),3,4,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Viazi mviringo (Irish potatoes),Kupanda (planting),11,12,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Viazi mviringo (Irish potatoes),Kupalilia (weeding),12,1,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Viazi mviringo (Irish potatoes),Kunyunyizia dawa ya ukungu (fungicide spraying),12,2,no,yes,chemical
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Viazi mviringo (Irish potatoes),Kuvuna (harvest),3,4,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Viazi mviringo (Irish potatoes),Kubeba mazao (carrying produce to store/market),3,4,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupandikiza (transplanting),1,2,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupalilia (weeding),2,3,yes,no,bending
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kuvuna (harvest),5,6,yes,no,lifting
+Mbeya,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupura na kubeba (threshing and carrying),6,6,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Korosho (cashew),Kuandaa shamba (land preparation),4,6,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Korosho (cashew),Kupulizia salfa (sulphur dusting),6,10,no,yes,chemical
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Korosho (cashew),Kuokota (nut collection),10,12,yes,no,bending
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Korosho (cashew),Kubeba mazao (carrying produce to store/market),10,1,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Muhogo (cassava),Kupanda (planting),11,1,yes,no,bending
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Muhogo (cassava),Kupalilia (weeding),1,3,yes,no,bending
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Muhogo (cassava),Kuchimba (digging out roots),6,10,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuandaa shamba (land preparation),10,11,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupanda (planting),11,12,yes,no,bending
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupalilia (weeding),1,2,yes,no,bending
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuweka mbolea (fertiliser application),1,1,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kunyunyizia dawa (pesticide spraying),1,2,no,yes,chemical
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kuvuna (harvest),5,7,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Mahindi (maize),Kupura na kubeba (threshing and carrying),7,8,yes,no,lifting
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Ufuta (sesame),Kupanda (planting),2,3,yes,no,bending
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Ufuta (sesame),Kupalilia (weeding),3,4,yes,no,bending
+Mtwara,"Msimu (unimodal, Nov-Apr rains)",Ufuta (sesame),Kuvuna (harvest),6,7,yes,no,lifting
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Pamba (cotton),Kuandaa shamba (land preparation),11,11,yes,no,lifting
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Pamba (cotton),Kupanda (planting),11,12,yes,no,bending
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Pamba (cotton),Kupalilia (weeding),12,2,yes,no,bending
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Pamba (cotton),Kunyunyizia dawa (pesticide spraying),1,4,no,yes,chemical
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Pamba (cotton),Kuchuma (picking),5,7,yes,no,bending
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Pamba (cotton),Kubeba mazao (carrying produce to store/market),6,8,yes,no,lifting
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kuandaa shamba (land preparation),12,12,yes,no,lifting
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupandikiza (transplanting),1,2,yes,no,bending
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupalilia (weeding),2,3,yes,no,bending
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kuvuna (harvest),5,6,yes,no,lifting
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mpunga (rice paddy),Kupura na kubeba (threshing and carrying),6,7,yes,no,lifting
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mtama (sorghum),Kupanda (planting),12,1,yes,no,bending
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mtama (sorghum),Kupalilia (weeding),1,2,yes,no,bending
+Shinyanga,"Msimu (unimodal, Nov-Apr rains)",Mtama (sorghum),Kuvuna (harvest),5,6,yes,no,lifting
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kuandaa shamba (land preparation),2,2,yes,no,lifting
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kupanda (planting),3,3,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kupalilia (weeding),4,4,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kunyunyizia dawa (pesticide spraying),4,5,no,yes,chemical
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kuvuna (harvest),7,8,yes,no,lifting
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kupanda (planting),10,11,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kupalilia (weeding),11,12,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Mahindi (maize),Kuvuna (harvest),1,2,yes,no,lifting
+Kilimanjaro,Masika + Vuli (bimodal),Maharage (beans),Kupanda (planting),3,3,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Maharage (beans),Kupalilia (weeding),4,4,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Maharage (beans),Kuvuna (harvest),6,7,yes,no,lifting
+Kilimanjaro,Masika + Vuli (bimodal),Maharage (beans),Kupanda (planting),10,10,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Maharage (beans),Kuvuna (harvest),12,1,yes,no,lifting
+Kilimanjaro,Masika + Vuli (bimodal),Kahawa (coffee),Kupogoa (pruning),1,2,yes,no,lifting
+Kilimanjaro,Masika + Vuli (bimodal),Kahawa (coffee),Kunyunyizia dawa ya ukungu (fungicide spraying),3,6,no,yes,chemical
+Kilimanjaro,Masika + Vuli (bimodal),Kahawa (coffee),Kuchuma (picking),8,12,yes,no,bending
+Kilimanjaro,Masika + Vuli (bimodal),Kahawa (coffee),Kubeba mazao (carrying produce to store/market),8,12,yes,no,lifting
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kuandaa shamba (land preparation),2,3,yes,no,lifting
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kupanda (planting),3,4,yes,no,bending
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kupalilia (weeding),4,5,yes,no,bending
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kunyunyizia dawa (pesticide spraying),5,5,no,yes,chemical
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kuvuna (harvest),7,8,yes,no,lifting
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kupanda (planting),10,11,yes,no,bending
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kupalilia (weeding),11,12,yes,no,bending
+Tanga,Masika + Vuli (bimodal),Mahindi (maize),Kuvuna (harvest),1,2,yes,no,lifting
+Tanga,Masika + Vuli (bimodal),Machungwa (oranges),Kunyunyizia dawa ya ukungu (fungicide spraying),3,4,no,yes,chemical
+Tanga,Masika + Vuli (bimodal),Machungwa (oranges),Kuvuna (harvest),5,8,yes,no,lifting
+Tanga,Masika + Vuli (bimodal),Machungwa (oranges),Kubeba mazao (carrying produce to store/market),5,8,yes,no,lifting
+Tanga,Masika + Vuli (bimodal),Muhogo (cassava),Kupanda (planting),3,4,yes,no,bending
+Tanga,Masika + Vuli (bimodal),Muhogo (cassava),Kupalilia (weeding),4,6,yes,no,bending
+Tanga,Masika + Vuli (bimodal),Muhogo (cassava),Kuchimba (digging out roots),1,3,yes,no,lifting
+Kagera,Masika + Vuli (bimodal),Maharage (beans),Kupanda (planting),2,3,yes,no,bending
+Kagera,Masika + Vuli (bimodal),Maharage (beans),Kupalilia (weeding),3,4,yes,no,bending
+Kagera,Masika + Vuli (bimodal),Maharage (beans),Kuvuna (harvest),5,6,yes,no,lifting
+Kagera,Masika + Vuli (bimodal),Maharage (beans),Kupanda (planting),9,10,yes,no,bending
+Kagera,Masika + Vuli (bimodal),Maharage (beans),Kupalilia (weeding),10,11,yes,no,bending
+Kagera,Masika + Vuli (bimodal),Maharage (beans),Kuvuna (harvest),12,1,yes,no,lifting
+Kagera,Masika + Vuli (bimodal),Kahawa (coffee),Kupogoa (pruning),2,3,yes,no,lifting
+Kagera,Masika + Vuli (bimodal),Kahawa (coffee),Kunyunyizia dawa ya ukungu (fungicide spraying),3,5,no,yes,chemical
+Kagera,Masika + Vuli (bimodal),Kahawa (coffee),Kuchuma (picking),5,8,yes,no,bending
+Kagera,Masika + Vuli (bimodal),Kahawa (coffee),Kubeba mazao (carrying produce to store/market),6,9,yes,no,lifting
+Kagera,Masika + Vuli (bimodal),Mahindi (maize),Kupanda (planting),9,10,yes,no,bending
+Kagera,Masika + Vuli (bimodal),Mahindi (maize),Kupalilia (weeding),10,11,yes,no,bending
+Kagera,Masika + Vuli (bimodal),Mahindi (maize),Kunyunyizia dawa (pesticide spraying),11,11,no,yes,chemical
+Kagera,Masika + Vuli (bimodal),Mahindi (maize),Kuvuna (harvest),1,2,yes,no,lifting
+ALL,National default (unimodal pattern),Mahindi (maize),Kuandaa shamba (land preparation),11,11,yes,no,lifting
+ALL,National default (unimodal pattern),Mahindi (maize),Kupanda (planting),12,1,yes,no,bending
+ALL,National default (unimodal pattern),Mahindi (maize),Kupalilia (weeding),1,2,yes,no,bending
+ALL,National default (unimodal pattern),Mahindi (maize),Kunyunyizia dawa (pesticide spraying),1,2,no,yes,chemical
+ALL,National default (unimodal pattern),Mahindi (maize),Kuvuna (harvest),5,7,yes,no,lifting
+ALL,National default (unimodal pattern),Mahindi (maize),Kupura na kubeba (threshing and carrying),7,8,yes,no,lifting
+ALL,National default (unimodal pattern),Maharage (beans),Kupanda (planting),2,3,yes,no,bending
+ALL,National default (unimodal pattern),Maharage (beans),Kupalilia (weeding),3,4,yes,no,bending
+ALL,National default (unimodal pattern),Maharage (beans),Kuvuna (harvest),5,6,yes,no,bending
+ALL,National default (unimodal pattern),Mpunga (rice paddy),Kupandikiza (transplanting),1,2,yes,no,bending
+ALL,National default (unimodal pattern),Mpunga (rice paddy),Kupalilia (weeding),2,3,yes,no,bending
+ALL,National default (unimodal pattern),Mpunga (rice paddy),Kuvuna (harvest),5,6,yes,no,lifting
+ALL,National default (unimodal pattern),Muhogo (cassava),Kupanda (planting),12,1,yes,no,bending
+ALL,National default (unimodal pattern),Muhogo (cassava),Kupalilia (weeding),1,3,yes,no,bending
+ALL,National default (unimodal pattern),Muhogo (cassava),Kuchimba (digging out roots),6,9,yes,no,lifting
+ALL,National default (unimodal pattern),Mbogamboga (vegetables),Kunyunyizia dawa (pesticide spraying),1,12,no,yes,chemical
+ALL,National default (unimodal pattern),Mbogamboga (vegetables),Kumwagilia na kubeba maji (watering and carrying water),6,10,yes,no,lifting
+ALL,National default (unimodal pattern),Alizeti (sunflower),Kupanda (planting),1,2,yes,no,bending
+ALL,National default (unimodal pattern),Alizeti (sunflower),Kuvuna (harvest),5,6,yes,no,lifting

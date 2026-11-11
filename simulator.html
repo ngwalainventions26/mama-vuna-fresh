@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Phone simulator{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Phone simulator</h1>
+  <p class="sub">Test the real USSD menus and SMS replies without a telecom line. Everything you do here changes real records, so use training numbers (e.g. +255700100002) or load training data first.</p></div></div>
+<div class="phones">
+  <div class="stack">
+    <label class="f">Phone number<input type="tel" id="simPhone" value="+255700200009"></label>
+    <div class="phone"><div class="phone-bar"><span id="barNum"></span><span>USSD</span></div>
+      <div class="screen">
+        <div class="ussd-box" id="ussdBox">Dial {{ code }} to start</div>
+        <div class="row"><input type="text" id="ussdIn" placeholder="Reply" autocomplete="off" aria-label="USSD reply"><button class="btn primary" id="ussdSend">Send</button></div>
+        <div class="row"><button class="btn" id="dial" style="flex:1">Dial {{ code }}</button><button class="btn" id="hang">End</button></div>
+      </div></div>
+  </div>
+  <div class="stack">
+    <label class="f">&nbsp;<span class="small muted">SMS for the same number</span></label>
+    <div class="phone"><div class="phone-bar"><span>Messages</span><button class="btn sm" id="refresh" style="padding:0 8px">Refresh</button></div>
+      <div class="screen"><div class="inbox" id="inbox"></div>
+        <div class="row" style="padding-top:10px"><input type="text" id="smsIn" placeholder="e.g. 1, HATARI, MSAADA" aria-label="SMS text"><button class="btn primary" id="smsSend">Send</button></div></div></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function(){
+  var csrf = {{ csrf|tojson }}, parts = null;
+  var $ = function(id){ return document.getElementById(id); };
+  function post(url, body){ return fetch(url, {method:'POST', headers:{'Content-Type':'application/json','X-CSRF-Token':csrf}, body:JSON.stringify(body), credentials:'same-origin'}).then(function(r){ return r.json(); }); }
+  function show(t){ $('ussdBox').textContent = t.replace(/^(CON|END) /,''); if (t.indexOf('END') === 0) parts = null; }
+  function step(){ post('/admin/simulator/ussd', {phone:$('simPhone').value, text: parts.join('*')}).then(function(d){ show(d.reply); inbox(); }); }
+  $('dial').onclick = function(){ parts = []; step(); };
+  $('hang').onclick = function(){ parts = null; $('ussdBox').textContent = 'Session ended'; };
+  $('ussdSend').onclick = function(){ if (parts === null) { $('ussdBox').textContent = 'Dial first'; return; } var v = $('ussdIn').value.trim(); if(!v) return; parts.push(v); $('ussdIn').value=''; step(); $('ussdIn').focus(); };
+  $('ussdIn').onkeydown = function(e){ if(e.key === 'Enter') $('ussdSend').click(); };
+  function esc(s){ return s.replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+  function inbox(){ $('barNum').textContent = $('simPhone').value;
+    fetch('/admin/simulator/inbox?phone=' + encodeURIComponent($('simPhone').value), {credentials:'same-origin'}).then(function(r){ return r.json(); }).then(function(rows){
+      $('inbox').innerHTML = rows.length ? rows.map(function(r){ return '<div class="msg '+r.dir+'">'+esc(r.body)+'<time>'+r.at+(r.kind?' · '+r.kind:'')+'</time></div>'; }).join('') : '<p class="small" style="color:#66706A;text-align:center;margin:auto">No messages for this number yet.</p>';
+      $('inbox').scrollTop = 1e6; }); }
+  $('smsSend').onclick = function(){ var v = $('smsIn').value.trim(); if(!v) return; post('/admin/simulator/sms', {phone:$('simPhone').value, text:v}).then(function(){ $('smsIn').value=''; inbox(); }); };
+  $('smsIn').onkeydown = function(e){ if(e.key === 'Enter') $('smsSend').click(); };
+  $('refresh').onclick = inbox; $('simPhone').onchange = inbox; inbox();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block content %}
+<div class="panel" style="max-width:560px"><h1>{{ 'Page not found' if code == 404 else 'Not allowed' if code == 403 else 'Something went wrong' }}</h1>
+<p>{{ detail }}</p><p><a class="btn" href="/">Back to overview</a></p></div>
+{% endblock %}
+{% block bare %}
+<div class="login-wrap"><div class="login"><h1>Error {{ code }}</h1><p>{{ detail }}</p><a class="btn primary" href="/">Continue</a></div></div>
+{% endblock %}

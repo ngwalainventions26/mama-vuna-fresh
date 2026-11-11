@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field, status_pill with context %}
+{% block title %}Request {{ r.id }}{% endblock %}
+{% block content %}
+<div class="page-head"><div><div class="eyebrow">Support request #{{ r.id }} · {{ r.source }}</div>
+  <h1>{{ label_for(r.activity, 'en')|capitalize }} for {{ r.mother.name }}</h1>
+  <p class="sub">{{ r.start_date.strftime('%d %b') }} – {{ r.end_date.strftime('%d %b %Y') }} · {{ r.mother.village or r.mother.ward or '' }} {{ r.mother.district }} · about {{ r.est_hours|int }} hours planned</p></div>
+  <div class="actions">{{ status_pill(r.status) }}<a class="btn" href="/mothers/{{ r.mother.id }}">Mother's profile</a></div></div>
+<div class="grid g-side">
+<div class="stack">
+  <section class="panel"><h2>Who was asked</h2>
+    <div class="table-wrap"><table><thead><tr><th>Helper</th><th>Why chosen</th><th>Asked</th><th>Answer</th></tr></thead><tbody>
+    {% for a in r.alerts %}<tr><td><a href="/helpers/{{ a.helper.id }}">{{ a.helper.name }}</a><div class="sub mono">{{ a.helper.phone }}</div></td>
+      <td class="small">{{ a.reason }}{% if a.score %} · score {{ a.score }}{% endif %}</td><td class="num">{{ a.sent_at.strftime('%d/%m %H:%M') }}</td>
+      <td><span class="pill {{ 'verified' if a.status == 'accepted' else 'open' if a.status in ('declined','timeout') else 'alerting' if a.status == 'sent' else '' }}">{{ a.status }}</span>
+        {% if a.responded_at %}<div class="sub">{{ a.responded_at.strftime('%d/%m %H:%M') }}</div>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="4" class="empty">No helper asked yet.</td></tr>{% endfor %}</tbody></table></div>
+  </section>
+  {% if candidates %}
+  <section class="panel"><div class="panel-head"><h2>Eligible helpers</h2><span class="muted small">Best match first. Same rules as automatic matching.</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Helper</th><th>Group</th><th>Why</th><th>Score</th><th></th></tr></thead><tbody>
+    {% for h, score, why in candidates %}<tr><td>{{ h.name }}<div class="sub mono">{{ h.phone }}</div></td><td>{{ h.group.name if h.group else '—' }}</td><td class="small">{{ why }}</td><td class="num">{{ score }}</td>
+      <td><form method="post" action="/requests/{{ r.id }}/assign">{{ csrf_field() }}<input type="hidden" name="helper_id" value="{{ h.id }}"><button class="btn sm" title="Use when you arranged this helper by phone">Assign directly</button></form></td></tr>{% endfor %}
+    </tbody></table></div></section>
+  {% endif %}
+</div>
+<div class="stack">
+  {% if r.status == 'accepted' %}
+  <form class="panel" method="post" action="/requests/{{ r.id }}/verify">{{ csrf_field() }}
+    <h2>Confirm the work</h2><p class="small muted">Check with the mother that {{ r.helper.name }} did the work, then record the real hours. This adds a record to the time-credit ledger.</p>
+    <label class="f">Hours worked<input type="number" name="hours" id="hours" min="0.5" max="1000" step="0.5" value="{{ r.est_hours|round|int }}" required></label>
+    <label class="f">Note<input type="text" name="note" id="note"></label>
+    <div><button class="btn primary">Verify and record</button></div></form>
+  {% elif r.status == 'verified' %}
+  <section class="panel"><h2>Verified</h2><p>{{ r.verified_hours }} hours by {{ r.helper.name if r.helper else 'helper' }} on {{ r.verified_at.strftime('%d/%m/%Y') }}.</p>{% if r.note %}<p class="small muted">{{ r.note }}</p>{% endif %}</section>
+  {% endif %}
+  {% if r.status in ('open', 'alerting', 'unfilled') %}
+  <form class="panel" method="post" action="/requests/{{ r.id }}/dispatch">{{ csrf_field() }}
+    <h2>Ask the next helper</h2><p class="small muted">Withdraws any waiting question and asks the best remaining helper by SMS.</p>
+    <div><button class="btn gold">Ask next helper</button></div></form>
+  {% endif %}
+  {% if r.status not in ('verified', 'cancelled') %}
+  <form class="panel" method="post" action="/requests/{{ r.id }}/cancel">{{ csrf_field() }}<h2>Cancel</h2>
+    <p class="small muted">Use when the help is no longer needed.</p><div><button class="btn danger sm" data-confirm="Press again to cancel">Cancel request</button></div></form>
+  {% endif %}
+</div></div>
+{% endblock %}

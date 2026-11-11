@@ -1,0 +1,9 @@
+fastapi==0.162.2
+uvicorn[standard]==0.54.0
+sqlalchemy==2.1.8
+jinja2==3.1.6
+itsdangerous==2.2.0
+python-multipart==0.0.32
+httpx==0.28.1
+# PostgreSQL (optional): uncomment and set DATABASE_URL=postgresql+psycopg://user:pass@host/db
+# psycopg[binary]==3.2.10

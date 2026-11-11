@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field, region_select, locs_json with context %}
+{% block title %}Community groups{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Community groups</h1><p class="sub">Cooperatives, savings groups, women's and youth groups whose members help pregnant women.</p></div></div>
+<div class="panel" style="margin-bottom:16px"><div class="table-wrap"><table>
+<thead><tr><th>Group</th><th>Type</th><th>Place</th><th>Leader</th><th>Helpers</th><th>Verified hours</th></tr></thead><tbody>
+{% for g in rows %}<tr><td><b>{{ g.name }}</b></td><td>{{ m.GROUP_TYPES.get(g.group_type, g.group_type) }}</td><td>{{ g.village or g.ward or '' }}<div class="sub">{{ g.district }}, {{ g.region }}</div></td>
+  <td>{{ g.leader_name or '—' }}<div class="sub mono">{{ g.leader_phone or '' }}</div></td><td class="num"><a href="/helpers?q=">{{ g.helpers|length }}</a></td>
+  <td class="num">{{ g.helpers|sum(attribute='credit_hours')|round(1) }}</td></tr>
+{% else %}<tr><td colspan="6" class="empty">No groups yet.</td></tr>{% endfor %}</tbody></table></div></div>
+<form class="panel" method="post" action="/groups/new" style="max-width:900px">{{ csrf_field() }}<h2>Add a group</h2>
+  <div class="fields">
+    <label class="f">Name<input type="text" name="name" id="g_name" required></label>
+    <label class="f">Type<select name="group_type" id="g_type">{% for k, v in m.GROUP_TYPES.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+    <label class="f">Region{{ region_select(regions, user.region or '') }}</label>
+    <label class="f">District<select name="district" id="g_district" data-district data-value="{{ user.district or '' }}" required></select></label>
+    <label class="f">Ward<input type="text" name="ward" id="g_ward"></label>
+    <label class="f">Village<input type="text" name="village" id="g_village"></label>
+    <label class="f">Leader<input type="text" name="leader_name" id="g_leader"></label>
+    <label class="f">Leader phone<input type="tel" name="leader_phone" id="g_phone"></label>
+  </div><div><button class="btn primary">Save group</button></div></form>
+{{ locs_json(locs) }}
+{% endblock %}

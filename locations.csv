@@ -1,0 +1,173 @@
+region,district,zone
+Arusha,Arusha City,Northern
+Arusha,Arusha DC,Northern
+Arusha,Meru,Northern
+Arusha,Karatu,Northern
+Arusha,Monduli,Northern
+Arusha,Longido,Northern
+Arusha,Ngorongoro,Northern
+Dar es Salaam,Ilala,Coastal
+Dar es Salaam,Kinondoni,Coastal
+Dar es Salaam,Temeke,Coastal
+Dar es Salaam,Ubungo,Coastal
+Dar es Salaam,Kigamboni,Coastal
+Dodoma,Dodoma City,Central
+Dodoma,Bahi,Central
+Dodoma,Chamwino,Central
+Dodoma,Chemba,Central
+Dodoma,Kondoa,Central
+Dodoma,Kongwa,Central
+Dodoma,Mpwapwa,Central
+Geita,Geita,Lake
+Geita,Bukombe,Lake
+Geita,Chato,Lake
+Geita,Mbogwe,Lake
+Geita,Nyang'hwale,Lake
+Iringa,Iringa Municipal,Southern Highlands
+Iringa,Iringa DC,Southern Highlands
+Iringa,Kilolo,Southern Highlands
+Iringa,Mufindi,Southern Highlands
+Iringa,Mafinga,Southern Highlands
+Kagera,Bukoba Municipal,Lake
+Kagera,Bukoba DC,Lake
+Kagera,Biharamulo,Lake
+Kagera,Karagwe,Lake
+Kagera,Kyerwa,Lake
+Kagera,Missenyi,Lake
+Kagera,Muleba,Lake
+Kagera,Ngara,Lake
+Katavi,Mpanda,Western
+Katavi,Mlele,Western
+Katavi,Tanganyika,Western
+Katavi,Mpimbwe,Western
+Kigoma,Kigoma-Ujiji,Western
+Kigoma,Kigoma DC,Western
+Kigoma,Buhigwe,Western
+Kigoma,Kakonko,Western
+Kigoma,Kasulu,Western
+Kigoma,Kibondo,Western
+Kigoma,Uvinza,Western
+Kilimanjaro,Moshi Municipal,Northern
+Kilimanjaro,Moshi DC,Northern
+Kilimanjaro,Hai,Northern
+Kilimanjaro,Mwanga,Northern
+Kilimanjaro,Rombo,Northern
+Kilimanjaro,Same,Northern
+Kilimanjaro,Siha,Northern
+Lindi,Lindi,Southern
+Lindi,Kilwa,Southern
+Lindi,Liwale,Southern
+Lindi,Nachingwea,Southern
+Lindi,Ruangwa,Southern
+Lindi,Mtama,Southern
+Manyara,Babati,Northern
+Manyara,Hanang,Northern
+Manyara,Kiteto,Northern
+Manyara,Mbulu,Northern
+Manyara,Simanjiro,Northern
+Mara,Musoma,Lake
+Mara,Bunda,Lake
+Mara,Butiama,Lake
+Mara,Rorya,Lake
+Mara,Serengeti,Lake
+Mara,Tarime,Lake
+Mbeya,Mbeya City,Southern Highlands
+Mbeya,Mbeya DC,Southern Highlands
+Mbeya,Chunya,Southern Highlands
+Mbeya,Kyela,Southern Highlands
+Mbeya,Mbarali,Southern Highlands
+Mbeya,Rungwe,Southern Highlands
+Mbeya,Busokelo,Southern Highlands
+Morogoro,Morogoro Municipal,Eastern
+Morogoro,Morogoro DC,Eastern
+Morogoro,Gairo,Eastern
+Morogoro,Kilombero,Eastern
+Morogoro,Ifakara,Eastern
+Morogoro,Kilosa,Eastern
+Morogoro,Malinyi,Eastern
+Morogoro,Mvomero,Eastern
+Morogoro,Ulanga,Eastern
+Mtwara,Mtwara,Southern
+Mtwara,Masasi,Southern
+Mtwara,Nanyumbu,Southern
+Mtwara,Newala,Southern
+Mtwara,Tandahimba,Southern
+Mtwara,Nanyamba,Southern
+Mwanza,Nyamagana,Lake
+Mwanza,Ilemela,Lake
+Mwanza,Kwimba,Lake
+Mwanza,Magu,Lake
+Mwanza,Misungwi,Lake
+Mwanza,Sengerema,Lake
+Mwanza,Buchosa,Lake
+Mwanza,Ukerewe,Lake
+Njombe,Njombe,Southern Highlands
+Njombe,Ludewa,Southern Highlands
+Njombe,Makete,Southern Highlands
+Njombe,Wanging'ombe,Southern Highlands
+Njombe,Makambako,Southern Highlands
+Pwani,Kibaha,Coastal
+Pwani,Bagamoyo,Coastal
+Pwani,Chalinze,Coastal
+Pwani,Kisarawe,Coastal
+Pwani,Mafia,Coastal
+Pwani,Mkuranga,Coastal
+Pwani,Rufiji,Coastal
+Pwani,Kibiti,Coastal
+Rukwa,Sumbawanga,Western
+Rukwa,Kalambo,Western
+Rukwa,Nkasi,Western
+Ruvuma,Songea,Southern
+Ruvuma,Madaba,Southern
+Ruvuma,Mbinga,Southern
+Ruvuma,Namtumbo,Southern
+Ruvuma,Nyasa,Southern
+Ruvuma,Tunduru,Southern
+Shinyanga,Shinyanga,Lake
+Shinyanga,Kahama,Lake
+Shinyanga,Kishapu,Lake
+Shinyanga,Ushetu,Lake
+Shinyanga,Msalala,Lake
+Simiyu,Bariadi,Lake
+Simiyu,Busega,Lake
+Simiyu,Itilima,Lake
+Simiyu,Maswa,Lake
+Simiyu,Meatu,Lake
+Singida,Singida,Central
+Singida,Ikungi,Central
+Singida,Iramba,Central
+Singida,Itigi,Central
+Singida,Manyoni,Central
+Singida,Mkalama,Central
+Songwe,Mbozi,Southern Highlands
+Songwe,Ileje,Southern Highlands
+Songwe,Momba,Southern Highlands
+Songwe,Songwe,Southern Highlands
+Songwe,Tunduma,Southern Highlands
+Tabora,Tabora,Western
+Tabora,Igunga,Western
+Tabora,Kaliua,Western
+Tabora,Nzega,Western
+Tabora,Sikonge,Western
+Tabora,Urambo,Western
+Tabora,Uyui,Western
+Tanga,Tanga City,Coastal
+Tanga,Handeni,Coastal
+Tanga,Kilindi,Coastal
+Tanga,Korogwe,Coastal
+Tanga,Lushoto,Coastal
+Tanga,Bumbuli,Coastal
+Tanga,Mkinga,Coastal
+Tanga,Muheza,Coastal
+Tanga,Pangani,Coastal
+Kaskazini Unguja,Kaskazini A,Zanzibar
+Kaskazini Unguja,Kaskazini B,Zanzibar
+Kusini Unguja,Kati,Zanzibar
+Kusini Unguja,Kusini,Zanzibar
+Mjini Magharibi,Mjini,Zanzibar
+Mjini Magharibi,Magharibi A,Zanzibar
+Mjini Magharibi,Magharibi B,Zanzibar
+Kaskazini Pemba,Wete,Zanzibar
+Kaskazini Pemba,Micheweni,Zanzibar
+Kusini Pemba,Chake Chake,Zanzibar
+Kusini Pemba,Mkoani,Zanzibar

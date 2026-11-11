@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field with context %}
+{% block title %}System{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>System</h1><p class="sub">Settings come from the server's environment file (.env). Change them there and restart.</p></div></div>
+<div class="grid g2">
+<section class="panel"><h2>Automatic matching</h2>
+  <p class="small">Runs every {{ s.SCHEDULER_INTERVAL_MIN }} minutes{{ '' if s.SCHEDULER_ENABLED else ' (switched off)' }}: creates requests {{ s.LEAD_DAYS }} days before each risk period, asks helpers, moves on after {{ s.ALERT_TIMEOUT_HOURS }} hours, sends pregnancy tips and closes finished records.</p>
+  <p class="small mono">{{ state or 'Not run yet' }}</p>
+  <form method="post" action="/admin/system/run">{{ csrf_field() }}<button class="btn gold">Run now</button></form></section>
+<section class="panel"><h2>Connections</h2><dl class="kv">
+  <dt>USSD code</dt><dd class="mono">{{ s.USSD_SERVICE_CODE }}</dd>
+  <dt>USSD callback</dt><dd class="mono">{{ request.base_url }}ussd{{ '?token=…' if s.WEBHOOK_TOKEN }}</dd>
+  <dt>SMS callback</dt><dd class="mono">{{ request.base_url }}sms/inbound{{ '?token=…' if s.WEBHOOK_TOKEN }}</dd>
+  <dt>Delivery reports</dt><dd class="mono">{{ request.base_url }}sms/delivery{{ '?token=…' if s.WEBHOOK_TOKEN }}</dd>
+  <dt>SMS provider</dt><dd>{{ s.SMS_PROVIDER }}{% if s.SMS_PROVIDER == 'africastalking' %} ({{ 'sandbox' if s.AT_SANDBOX else 'live' }}, user {{ s.AT_USERNAME }}){% endif %}</dd>
+  <dt>Webhook token</dt><dd>{{ 'set' if s.WEBHOOK_TOKEN else 'not set: anyone who knows the URL can call it' }}</dd>
+  <dt>USSD sessions</dt><dd>{{ ussd_sessions }}</dd>
+  <dt>API docs</dt><dd><a href="/api/docs">/api/docs</a></dd></dl></section>
+<section class="panel"><h2>Training data</h2>
+  <p class="small">Loads 4 example mothers, 5 helpers, 3 groups and a dispensary in Mvomero, Morogoro, so staff can practise and you can record demos. Every record is marked as demo and left out of reports. Do not load it on the live server once real mothers are registered.</p>
+  <p class="small">Loaded now: <b>{{ demo_mothers }}</b> demo mothers.</p>
+  <div class="actions"><form method="post" action="/admin/system/demo">{{ csrf_field() }}<input type="hidden" name="action" value="load"><button class="btn">Load training data</button></form>
+  <form method="post" action="/admin/system/demo">{{ csrf_field() }}<input type="hidden" name="action" value="remove"><button class="btn danger" data-confirm="Press again to remove">Remove training data</button></form></div></section>
+<section class="panel"><h2>Programme rules</h2><dl class="kv">
+  <dt>Protection starts</dt><dd>Week {{ s.RISK_START_WEEK }}</dd><dt>Protection ends</dt><dd>{{ s.POSTPARTUM_DAYS }} days after birth</dd>
+  <dt>Weekly tips</dt><dd>{{ 'on' if s.WEEKLY_TIPS_ENABLED else 'off' }}</dd><dt>Environment</dt><dd>{{ s.ENV }}</dd></dl></section>
+</div>
+{% endblock %}

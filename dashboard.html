@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% from "_m.html" import status_pill, pct with context %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="eyebrow">{% if user.role == 'admin' %}All regions{% elif user.district %}{{ user.district }}, {{ user.region }}{% else %}{{ user.region }}{% endif %}</div>
+  <h1>Habari, {{ user.name.split(' ')[0] }}</h1>
+  <p class="sub">{{ today().strftime('%A %d %B %Y') }}{% if user.role == 'chw' %} · your mothers and your ward{% endif %}</p></div>
+  <div class="actions"><a class="btn primary" href="/mothers/new">Register a mother</a><a class="btn" href="/helpers#add">Add a helper</a></div>
+</div>
+
+{% if k.demo_records %}<div class="note-box" style="margin-bottom:16px">Training data is loaded ({{ k.demo_records }} demo mothers). Demo records are marked and left out of every number on this page.</div>{% endif %}
+
+<div class="stats" style="margin-bottom:16px">
+  <a class="stat" href="/mothers"><b>{{ k.mothers_active }}</b><span>mothers under protection</span></a>
+  <a class="stat s-gold" href="/mothers?status=pregnant"><b>{{ k.mothers_third_tri }}</b><span>in third trimester now</span></a>
+  <a class="stat s-info" href="/helpers"><b>{{ k.helpers }}</b><span>helpers in {{ k.groups }} groups</span></a>
+  <a class="stat s-ok" href="/ledger"><b>{{ '{:,.0f}'.format(k.verified_hours) }}</b><span>verified support hours</span></a>
+  <a class="stat s-risk" href="/danger"><b>{{ k.dangers_open }}</b><span>danger reports open</span></a>
+  <a class="stat s-risk" href="/requests?status=unfilled"><b>{{ k.req_status.get('unfilled', 0) }}</b><span>requests without a helper</span></a>
+</div>
+
+<div class="grid g-side">
+  <div class="stack">
+    <section class="panel">
+      <div class="panel-head"><h2>Danger reports to act on</h2><a href="/danger" class="small">All reports</a></div>
+      <div class="queue">
+      {% for d in dangers %}
+        <a class="row" href="/mothers/{{ d.mother.id }}"><span><b>{{ d.mother.name }}</b> <span class="muted small">{{ d.mother.village or d.mother.ward or d.mother.district }} · week {{ gest_week(d.mother.edd) }}</span><br>
+          <span class="small">{% for s in d.signs.split(',') %}{{ m.DANGER_SIGNS.get(s, (s,s))[1] }}{{ ', ' if not loop.last }}{% endfor %}</span></span>
+          <span style="text-align:right">{{ status_pill(d.status, {'new':'New','contacted':'Contacted'}) }}<br><span class="muted small nowrap">{{ d.reported_at.strftime('%d/%m %H:%M') }}</span></span></a>
+      {% else %}<p class="empty">No open danger reports.</p>{% endfor %}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Help to confirm</h2><span class="muted small">Help periods ending this week. Check with the mother, then record the real hours.</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Mother</th><th>Help</th><th>Helper</th><th>Period</th><th>Hours done</th></tr></thead><tbody>
+      {% for r in to_verify %}
+        <tr><td><a href="/mothers/{{ r.mother.id }}">{{ r.mother.name }}</a><div class="sub">{{ r.mother.village or r.mother.district }}</div></td>
+        <td>{{ label_for(r.activity, 'en') }}</td><td>{{ r.helper.name if r.helper }}</td>
+        <td class="num">{{ r.start_date.strftime('%d/%m') }}–{{ r.end_date.strftime('%d/%m') }}</td>
+        <td><form class="inline-form" method="post" action="/requests/{{ r.id }}/verify"><input type="hidden" name="csrf" value="{{ csrf }}">
+          <input type="number" name="hours" id="hours-{{ r.id }}" min="0.5" max="1000" step="0.5" value="{{ (r.est_hours or 4)|round|int }}" aria-label="Hours worked">
+          <button class="btn sm primary">Verify</button></form></td></tr>
+      {% else %}<tr><td colspan="5" class="empty">Nothing to confirm right now.</td></tr>{% endfor %}
+      </tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Requests with no helper</h2><a href="/requests?status=unfilled" class="small">Open board</a></div>
+      <div class="queue">
+      {% for r in unfilled %}
+        <a class="row" href="/requests/{{ r.id }}"><span><b>{{ r.mother.name }}</b> · {{ label_for(r.activity, 'en') }}{% if r.task_type == 'chemical' %} <span class="tag chem">pesticide</span>{% endif %}<br>
+          <span class="muted small">{{ r.mother.village or r.mother.district }} · from {{ r.start_date.strftime('%d %b') }}</span></span>{{ status_pill('unfilled') }}</a>
+      {% else %}<p class="empty">Every request has a helper or is still being matched{% if waiting %} ({{ waiting }} waiting for replies){% endif %}.</p>{% endfor %}
+      </div>
+    </section>
+  </div>
+
+  <div class="stack">
+    <section class="panel">
+      <h2>Due in the next 3 weeks</h2>
+      <div class="queue">
+      {% for x in due_soon %}
+        <a class="row" href="/mothers/{{ x.id }}"><span>{{ x.name }}<br><span class="muted small">{{ x.village or x.district }}</span></span>
+          <span class="num">{{ x.edd.strftime('%d %b') }}</span></a>
+      {% else %}<p class="empty">No births expected in the next 3 weeks.</p>{% endfor %}
+      </div>
+    </section>
+    <section class="panel">
+      <h2>How the programme is doing</h2>
+      <dl class="kv">
+        <dt>Requests filled</dt><dd>{{ pct(k.fill_rate, k.fill_n) }}</dd>
+        <dt>Helper found within 48 h</dt><dd>{{ pct(k.rapid_rate, k.rapid_n) }}</dd>
+        <dt>No pesticide handling</dt><dd>{{ pct(k.pesticide_avoid, k.pesticide_n) }}</dd>
+        <dt>No heavy farm work</dt><dd>{{ pct(k.heavy_avoid, k.heavy_n) }}</dd>
+      </dl>
+      <p class="muted small">From CHW visits in week 28 or later. <a href="/reports">Full report</a></p>
+    </section>
+    {% if no_chw %}<section class="panel"><h2>{{ no_chw }} mother{{ 's' if no_chw != 1 }} without a CHW</h2>
+      <p class="small">Assign a CHW so danger alerts reach someone. <a href="/admin/users">Add CHW accounts</a> for their district.</p></section>{% endif %}
+    <p class="muted small">Automatic matching last ran: {{ scheduler.split(' ')[0].replace('T', ' ') if scheduler else 'not yet' }}</p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field, region_select, locs_json with context %}
+{% block title %}Staff accounts{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Staff accounts</h1><p class="sub">CHWs see their own mothers. District officers see their district. Administrators see everything.</p></div></div>
+<div class="panel" style="margin-bottom:16px"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Role and area</th><th>Last sign-in</th><th>Edit</th></tr></thead><tbody>
+{% for u in rows %}<tr><td><b>{{ u.name }}</b>{% if not u.active %} <span class="pill">disabled</span>{% endif %}<div class="sub">{{ u.email }}</div><div class="sub mono">{{ u.phone or 'no phone: will not get SMS alerts' }}</div></td>
+  <td>{{ m.ROLES[u.role] }}<div class="sub">{{ u.ward ~ ', ' if u.ward }}{{ u.district or '' }}{{ ', ' if u.district }}{{ u.region or 'All regions' }}</div></td>
+  <td class="num">{{ u.last_login.strftime('%d/%m/%y %H:%M') if u.last_login else 'never' }}</td>
+  <td><details class="drawer"><summary>Edit</summary><div class="body">
+    <form method="post" action="/admin/users/{{ u.id }}" class="stack" style="gap:8px">{{ csrf_field() }}
+      {% if user.role == 'admin' %}<select name="role" aria-label="Role">{% for k, v in m.ROLES.items() %}<option value="{{ k }}" {{ 'selected' if k == u.role }}>{{ v }}</option>{% endfor %}</select>
+      {% else %}<input type="hidden" name="role" value="{{ u.role }}">{% endif %}
+      <input type="text" name="region" value="{{ u.region or '' }}" placeholder="Region" aria-label="Region">
+      <input type="text" name="district" value="{{ u.district or '' }}" placeholder="District" aria-label="District">
+      <input type="text" name="ward" value="{{ u.ward or '' }}" placeholder="Ward" aria-label="Ward">
+      <input type="tel" name="phone" value="{{ u.phone or '' }}" placeholder="Phone for SMS alerts" aria-label="Phone">
+      <input type="password" name="new_password" placeholder="New password (optional)" aria-label="New password" autocomplete="new-password">
+      <label class="checks"><label><input type="checkbox" name="active" value="1" {{ 'checked' if u.active }}> Active</label></label>
+      <div><button class="btn sm primary">Save</button></div></form></div></details></td></tr>
+{% endfor %}</tbody></table></div></div>
+<form class="panel" method="post" action="/admin/users/new" style="max-width:900px">{{ csrf_field() }}<h2>Add a staff account</h2>
+  <div class="fields">
+    <label class="f">Full name<input type="text" name="name" id="u_name" required></label>
+    <label class="f">Email (used to sign in)<input type="email" name="email" id="u_email" required></label>
+    <label class="f">Phone <span class="hint">CHWs get danger alerts here</span><input type="tel" name="phone" id="u_phone"></label>
+    <label class="f">Role<select name="role" id="u_role">{% for k, v in m.ROLES.items() if user.role == 'admin' or k == 'chw' %}<option value="{{ k }}" {{ 'selected' if k == 'chw' }}>{{ v }}</option>{% endfor %}</select></label>
+    <label class="f">Region{{ region_select(regions, user.region or '', required=False) }}</label>
+    <label class="f">District<select name="district" id="u_district" data-district data-value="{{ user.district or '' }}"></select></label>
+    <label class="f">Ward<input type="text" name="ward" id="u_ward"></label>
+    <label class="f">First password <span class="hint">10+ characters. Ask them to change it.</span><input type="text" name="password" id="u_password" required autocomplete="off"></label>
+  </div><div><button class="btn primary">Create account</button></div></form>
+{{ locs_json(locs) }}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field with context %}
+{% block title %}Time-credit ledger{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Time-credit ledger</h1>
+  <p class="sub">Every hour of help confirmed by a CHW. Each record includes the hash of the record before it, so changing any past record breaks the chain. Only codes are stored: no names, phone numbers or health details.</p></div>
+  <form method="post" action="/ledger/verify">{{ csrf_field() }}<button class="btn gold">Check the chain</button></form></div>
+<div class="stats" style="margin-bottom:16px"><div class="stat s-ok"><b>{{ total }}</b><span>records</span></div><div class="stat s-ok"><b>{{ '{:,.1f}'.format(hours) }}</b><span>verified hours</span></div>
+  <div class="stat"><b class="mono" style="font-size:14px;word-break:break-all">{{ rows[0].hash[:24] ~ '…' if rows else '—' }}</b><span>latest hash (publish this to anchor the chain)</span></div></div>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>#</th><th>Date</th><th>Helper</th><th>Mother</th><th>Task</th><th>Hours</th><th>Verified by</th><th>Hash / previous</th></tr></thead><tbody>
+{% for e in rows %}<tr><td class="num">{{ e.seq }}</td><td class="num">{{ e.recorded_on }}</td><td class="mono">{{ e.helper_code }}</td><td class="mono">{{ e.mother_code }}</td>
+  <td>{{ task_label(e.task_type) }}</td><td class="num">{{ e.hours }}</td><td class="mono">{{ e.verifier_code }}</td>
+  <td class="hash">{{ e.hash[:20] }}…<br>{{ e.prev_hash[:20] }}…</td></tr>
+{% else %}<tr><td colspan="8" class="empty">No verified help yet.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

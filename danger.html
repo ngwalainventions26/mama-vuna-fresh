@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field with context %}
+{% block title %}Danger reports{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Danger reports</h1><p class="sub">Sent by mothers through USSD or SMS. The CHW gets an SMS at once. Call the mother, then record what happened.</p></div>
+  <div class="actions"><a class="btn {{ 'primary' if status == 'open' }}" href="/danger">Open</a><a class="btn {{ 'primary' if status != 'open' }}" href="/danger?status=all">All</a></div></div>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Reported</th><th>Mother</th><th>Signs</th><th>Status</th><th>Update</th></tr></thead><tbody>
+{% for d in rows %}<tr><td class="num">{{ d.reported_at.strftime('%d/%m %H:%M') }}<div class="sub">{{ d.via }}</div></td>
+  <td><a href="/mothers/{{ d.mother.id }}">{{ d.mother.name }}</a><div class="sub mono">{{ d.mother.phone }}</div><div class="sub">{{ d.mother.village or d.mother.district }}{% if d.mother.status == 'pregnant' %} · week {{ gest_week(d.mother.edd) }}{% endif %}</div></td>
+  <td>{% for s in d.signs.split(',') %}{{ m.DANGER_SIGNS.get(s, (s,s))[1] }}{{ ', ' if not loop.last }}{% endfor %}{% if d.facility %}<div class="sub">Facility: {{ d.facility.name }}</div>{% endif %}</td>
+  <td><span class="pill {{ d.status }}">{{ d.status }}</span>{% if d.first_contact_at %}<div class="sub">contacted after {{ ((d.first_contact_at - d.reported_at).total_seconds() / 3600)|round(1) }} h</div>{% endif %}</td>
+  <td>{% if d.status != 'resolved' %}<form method="post" action="/danger/{{ d.id }}" class="inline-form">{{ csrf_field() }}
+    <select name="status" aria-label="Status">{% for s in ['contacted','referred','resolved'] %}<option {{ 'selected' if s == d.status }}>{{ s }}</option>{% endfor %}</select>
+    <input type="text" name="notes" placeholder="Note" aria-label="Note" style="width:160px"><button class="btn sm primary">Save</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">No danger reports{{ ' open' if status == 'open' }}.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

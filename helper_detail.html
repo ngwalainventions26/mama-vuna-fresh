@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field with context %}
+{% block title %}{{ h.name }}{% endblock %}
+{% block content %}
+<div class="page-head"><div><div class="eyebrow mono">HLP-{{ '%05d'|format(h.id) }}</div><h1>{{ h.name }}</h1>
+  <p class="sub">{{ h.village or h.ward or '' }} {{ h.district }}, {{ h.region }} · {{ h.group.name if h.group else 'No group' }}</p></div>
+  <div class="actions"><span class="pill ok">{{ h.credit_hours|round(1) }} verified hours</span></div></div>
+<div class="grid g-side">
+  <section class="panel"><h2>Requests</h2>
+    <div class="table-wrap"><table><thead><tr><th>Asked</th><th>Mother</th><th>Help</th><th>Answer</th><th>Request</th></tr></thead><tbody>
+    {% for a in alerts %}<tr><td class="num">{{ a.sent_at.strftime('%d/%m/%y') }}</td><td>{{ a.request.mother.name }}</td><td>{{ label_for(a.request.activity, 'en') }}</td>
+      <td>{{ a.status }}</td><td><a href="/requests/{{ a.request.id }}">#{{ a.request.id }}</a> · {{ m.REQUEST_STATUS[a.request.status] }}</td></tr>
+    {% else %}<tr><td colspan="5" class="empty">Not asked yet.</td></tr>{% endfor %}</tbody></table></div></section>
+  <form class="panel" method="post" action="/helpers/{{ h.id }}/edit">{{ csrf_field() }}<h2>Details</h2>
+    <label class="f">Name<input type="text" name="name" id="name" value="{{ h.name }}" required></label>
+    <p class="small mono">{{ h.phone }}</p>
+    <label class="f">Ward<input type="text" name="ward" id="ward" value="{{ h.ward or '' }}"></label>
+    <label class="f">Village<input type="text" name="village" id="village" value="{{ h.village or '' }}"></label>
+    <label class="f">Group<select name="group_id" id="group_id"><option value="">None</option>{% for g in groups %}<option value="{{ g.id }}" {{ 'selected' if g.id == h.group_id }}>{{ g.name }}</option>{% endfor %}</select></label>
+    <label class="f">SMS language<select name="language" id="language"><option value="sw">Kiswahili</option><option value="en" {{ 'selected' if h.language == 'en' }}>English</option></select></label>
+    <fieldset><legend>Can help with</legend><div class="checks" style="flex-direction:column">
+      {% for k, v in m.TASK_TYPES.items() if k != 'chemical' %}<label><input type="checkbox" name="skills" value="{{ k }}" {{ 'checked' if k in h.skill_list() }}> {{ v[1] }}</label>{% endfor %}
+      <label><input type="checkbox" name="pesticide_trained" value="1" {{ 'checked' if h.pesticide_trained }}> Pesticide trained</label>
+      <label><input type="checkbox" name="available" value="1" {{ 'checked' if h.available }}> Available for requests</label></div></fieldset>
+    <div><button class="btn primary">Save</button></div></form>
+</div>
+{% endblock %}

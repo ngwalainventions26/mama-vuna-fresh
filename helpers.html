@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_m.html" import csrf_field, region_select, locs_json with context %}
+{% block title %}Helpers{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Helpers</h1><p class="sub">Neighbours, relatives and group members who take over heavy work. Helpers can also join by dialling {{ settings.USSD_SERVICE_CODE }}.</p></div></div>
+<form class="panel filters" method="get" style="margin-bottom:16px">
+  <label class="f">Search<input type="search" id="q" name="q" value="{{ q }}" placeholder="Name, phone, village"></label>
+  <label class="f">District<input type="text" id="district_f" name="district" value="{{ district }}"></label>
+  <button class="btn">Filter</button></form>
+<div class="panel" style="margin-bottom:16px"><div class="table-wrap"><table>
+<thead><tr><th>Helper</th><th>Place</th><th>Group</th><th>Can help with</th><th>Hours</th><th>Status</th></tr></thead><tbody>
+{% for h in rows %}<tr><td><a href="/helpers/{{ h.id }}"><b>{{ h.name }}</b></a> {% if h.is_demo %}<span class="tag demo">demo</span>{% endif %}<div class="sub mono">{{ h.phone }}</div></td>
+  <td>{{ h.village or h.ward or '—' }}<div class="sub">{{ h.district }}</div></td><td>{{ h.group.name if h.group else '—' }}</td>
+  <td class="small">{% for s in h.skill_list() %}<span class="tag {{ 'chem' if s == 'chemical' }}">{{ m.TASK_TYPES[s][1].split(' (')[0] if s in m.TASK_TYPES else s }}</span> {% endfor %}</td>
+  <td class="num">{{ h.credit_hours|round(1) }}</td>
+  <td>{% if h.opted_out %}<span class="pill">stopped SMS</span>{% elif h.available %}<span class="pill ok">available</span>{% else %}<span class="pill">away</span>{% endif %}</td></tr>
+{% else %}<tr><td colspan="6" class="empty">No helpers yet.</td></tr>{% endfor %}
+</tbody></table></div></div>
+<form class="panel" id="add" method="post" action="/helpers/new" style="max-width:900px">{{ csrf_field() }}
+  <h2>Add a helper</h2>
+  <div class="fields">
+    <label class="f">Full name<input type="text" name="name" id="h_name" required minlength="3"></label>
+    <label class="f">Phone<input type="tel" name="phone" id="h_phone" required placeholder="0754 123 456"></label>
+    <label class="f">Sex<select name="sex" id="h_sex"><option value="">—</option><option value="F">Female</option><option value="M">Male</option></select></label>
+    <label class="f">Region{{ region_select(regions, user.region or '') }}</label>
+    <label class="f">District<select name="district" id="h_district" data-district data-value="{{ user.district or '' }}" required></select></label>
+    <label class="f">Ward<input type="text" name="ward" id="h_ward" value="{{ user.ward or '' }}"></label>
+    <label class="f">Village<input type="text" name="village" id="h_village"></label>
+    <label class="f">Group<select name="group_id" id="h_group"><option value="">None</option>{% for g in groups %}<option value="{{ g.id }}">{{ g.name }} ({{ g.district }})</option>{% endfor %}</select></label>
+    <label class="f">SMS language<select name="language" id="h_lang"><option value="sw">Kiswahili</option><option value="en">English</option></select></label>
+  </div>
+  <fieldset><legend>Can help with</legend><div class="checks">
+    {% for k, v in m.TASK_TYPES.items() if k != 'chemical' %}<label><input type="checkbox" name="skills" value="{{ k }}" {{ 'checked' if k in ('lifting','bending','water','household','escort') }}> {{ v[1] }}</label>{% endfor %}
+    <label><input type="checkbox" name="pesticide_trained" value="1"> Trained in safe pesticide handling</label></div></fieldset>
+  <p class="small muted">Confirm the helper agreed to receive SMS requests and to share their number with the mothers they help.</p>
+  <div><button class="btn primary">Add helper</button></div>
+</form>
+{{ locs_json(locs) }}
+{% endblock %}
